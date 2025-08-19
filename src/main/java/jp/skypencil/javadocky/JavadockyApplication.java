@@ -64,10 +64,12 @@ public class JavadockyApplication {
 
   @Bean
   public JavadocDownloader javadocDownloader(
-      @Value("${javadocky.maven.repository}") String repoURL) {
+      @Value("${javadocky.maven.repository}") String repoURL, 
+      @Value("${javadocky.maven.repository.user}") String user, 
+      @Value("${javadocky.maven.repository.pass}")String pass) {
     Path home = Paths.get(System.getProperty(USER_HOME), JAVADOCKY_ROOT, JAVADOC_DIR);
     home.toFile().mkdirs();
     log.info("Making javadoc storage at {}", home.toFile().getAbsolutePath());
-    return new JavadocDownloader(home, repoURL);
+    return new JavadocDownloader(home, repoURL, user, pass);
   }
 }

@@ -31,9 +31,16 @@ public class JavadocDownloader {
   private final Path root;
 
   @Autowired
-  public JavadocDownloader(@NonNull Path root, @NonNull String repoURL) {
+  public JavadocDownloader(@NonNull Path root, @NonNull String repoURL, String user, String pass) {
     this.root = Objects.requireNonNull(root);
-    this.webClient = WebClient.create(Objects.requireNonNull(repoURL));
+
+    WebClient.Builder builder  = WebClient.builder()
+                     .baseUrl(Objects.requireNonNull(repoURL));
+
+    if(user!= null && pass!=null && !user.isEmpty() && !pass.isEmpty())
+          builder.defaultHeaders(headers -> headers.setBasicAuth(user, pass));
+
+    this.webClient = builder.build();
   }
 
   Mono<Optional<File>> download(String groupId, String artifactId, String version) {
